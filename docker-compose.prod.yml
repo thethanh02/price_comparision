@@ -1,0 +1,59 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  
+  kafka:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  cellphones_service:
+    image: thethanh02/cellphones_service:latest
+    env_file:
+      - ./cellphones_service/.env.prod
+  fpt_service:
+    image: thethanh02/fpt_service:latest
+    env_file:
+      - ./fpt_service/.env.prod
+  gearvn_service:
+    image: thethanh02/gearvn_service:latest
+    env_file:
+      - ./gearvn_service/.env.prod
+
+  caching_service:
+    image: thethanh02/caching_service:latest
+    env_file:
+      - ./caching_service/.env.prod
+
+  comparision_service:
+    image: thethanh02/comparision_service:latest
+    env_file:
+      - ./comparision_service/.env.prod
+    ports:
+      - 5000:5000
+
+  client:
+    image: thethanh02/comparision_client:latest
+    env_file:
+      - ./client/.env.production
+    ports:
+      - 5173:5173
+      
+  redis_service:
+    image: redis:7-alpine
+    ports:
+      - 6380:6379

@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Fpt API
+  description: An API to return products from Fpt
+
+paths:
+  /api/product:
+    get:
+      tags:
+        - Product
+      description: Returns products
+      parameters:
+        - in: query
+          name: name
+          required: true
+          description: product name
+          schema:
+            type: string
+            example: iphone 15
+
+      responses:
+        '200':
+          description: products in the requested name
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid query
+        '500':
+          description: Server error
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      xml:
+        name: '##default'
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ""
+        price:
+          type: number
+          example: 10
+        image:
+          type: string
+          example: ""
+        url:
+          type: string
+          example: ""
+        website:
+          type: string
+          example: ""
+      xml:
+        name: product

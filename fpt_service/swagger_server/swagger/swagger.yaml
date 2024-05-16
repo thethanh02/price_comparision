@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: Fpt API
+  description: An API to return products from Fpt
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /api/product:
+    get:
+      tags:
+      - Product
+      description: Returns products
+      operationId: api_product_get
+      parameters:
+      - name: name
+        in: query
+        description: product name
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: iphone 15
+      responses:
+        "200":
+          description: products in the requested name
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "400":
+          description: Invalid query
+        "500":
+          description: Server error
+      x-openapi-router-controller: swagger_server.controllers.product_controller
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      example:
+        total: 0
+        data:
+        - image: ""
+          website: ""
+          price: 10
+          name: ""
+          url: ""
+        - image: ""
+          website: ""
+          price: 10
+          name: ""
+          url: ""
+      xml:
+        name: '##default'
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ""
+        price:
+          type: number
+          example: 10
+        image:
+          type: string
+          example: ""
+        url:
+          type: string
+          example: ""
+        website:
+          type: string
+          example: ""
+      example:
+        image: ""
+        website: ""
+        price: 10
+        name: ""
+        url: ""
+      xml:
+        name: product
+
