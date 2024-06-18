@@ -34,11 +34,6 @@ services:
     env_file:
       - ./gearvn_service/.env.prod
 
-  caching_service:
-    image: thethanh02/caching_service:latest
-    env_file:
-      - ./caching_service/.env.prod
-
   comparision_service:
     image: thethanh02/comparision_service:latest
     env_file:

@@ -40,15 +40,6 @@ services:
     ports:
       - 5004:5000
 
-  caching_service:
-    build: ./caching_service
-    depends_on:
-      - kafka
-    env_file:
-      - ./caching_service/.env.prod
-    ports:
-      - 5001:5000
-
   comparision_service:
     build: ./comparision_service
     depends_on:
